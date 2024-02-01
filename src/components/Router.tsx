@@ -13,7 +13,6 @@ interface RouterProps {
 }
 
 export default function Router({isAuth}: RouterProps) {
-
     return (
         <>
             <Routes>
@@ -25,8 +24,6 @@ export default function Router({isAuth}: RouterProps) {
                         <Route path="/posts/new" element={<PostNew />} />
                         <Route path="/posts/edit/:id" element={<PostEdit />} />
                         <Route path="/profile" element={<ProfilePage />} />
-                        <Route path="/login" element={<LoginPage />} />
-                        <Route path="/signup" element={<SignUpPage />} />
                         <Route path="*" element={<Navigate replace to="/" />} />
                     </>
                 ) : (
