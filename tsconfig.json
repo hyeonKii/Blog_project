@@ -3,7 +3,8 @@
     "baseUrl": "src",
     "paths": {
       "pages/*": ["pages/*"],
-      "components/*": ["components/*"]
+      "components/*": ["components/*"],
+      "firebaseApp/": ["firebaseApp/*"]
     },
     "target": "ES2020",
     "useDefineForClassFields": true,

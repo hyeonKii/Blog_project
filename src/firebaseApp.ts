@@ -13,6 +13,7 @@ const firebaseConfig = {
   appId: import.meta.env.VITE_APP_ID,
 };
 
+//import 할 때마다 불필요한 초기화가 발생하기에 아래와 같이 설정
 try {
   app = getApp("app");
 } catch (e) {
