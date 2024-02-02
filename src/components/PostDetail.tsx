@@ -1,14 +1,16 @@
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import {Link, useNavigate, useParams} from "react-router-dom";
 import {PostProps} from "./PostList";
 import {db} from "firebaseApp";
 import {deleteDoc, doc, getDoc} from "firebase/firestore";
 import Loader from "./Loader";
 import {toast} from "react-toastify";
+import AuthContext from "context/AuthContext";
 
 export default function PostDetail() {
     const [post, setPost] = useState<PostProps | null>(null);
     const params = useParams();
+    const {user} = useContext(AuthContext);
     const navigate = useNavigate();
 
     const getPost = async (id: string) => {
@@ -47,10 +49,27 @@ export default function PostDetail() {
                             <div className="post__date">{post?.createdAt}</div>
                         </div>
                         <div className="post__utils-box">
-                            <div className="post__delete" role="presentation" onClick={handleDelete}>삭제</div>
-                            <div className="post__edit">
-                                <Link to={`/posts/edit/${post?.id}`}>수정</Link>
-                            </div>
+                            {post?.category && (
+                                <div className="post__category">
+                                    {post?.category}
+                                </div>
+                            )}
+                            {post?.uid === user?.uid && (
+                                <>
+                                    <div
+                                        className="post__delete"
+                                        role="presentation"
+                                        onClick={handleDelete}
+                                    >
+                                        삭제
+                                    </div>
+                                    <div className="post__edit">
+                                        <Link to={`/posts/edit/${post?.id}`}>
+                                            수정
+                                        </Link>
+                                    </div>
+                                </>
+                            )}
                         </div>
                         <div className="post__text post__text--pre-wrap">
                             {post?.content}

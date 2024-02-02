@@ -1,7 +1,7 @@
 import AuthContext from "context/AuthContext";
-import { FirebaseError } from "firebase/app";
+import {FirebaseError} from "firebase/app";
 import {getAuth, signOut} from "firebase/auth";
-import { FirestoreError } from "firebase/firestore";
+import {FirestoreError} from "firebase/firestore";
 import {app} from "firebaseApp";
 import {useContext} from "react";
 import {toast} from "react-toastify";

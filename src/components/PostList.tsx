@@ -13,12 +13,11 @@ import {useContext, useEffect, useState} from "react";
 import {Link} from "react-router-dom";
 import {toast} from "react-toastify";
 
-
 type TabType = "all" | "my";
 
 interface PostListProps {
     hasNavigation?: boolean;
-    defaultTab?: TabType;
+    defaultTab?: TabType | CategoryType;
 }
 
 export interface PostProps {
@@ -30,10 +29,29 @@ export interface PostProps {
     createdAt: string;
     updatedAt?: string;
     uid: string;
+    category?: CategoryType;
 }
 
-export default function PostList({hasNavigation = true, defaultTab = "all"}: PostListProps) {
-    const [activeTab, setActiveTab] = useState<TabType>(defaultTab);
+export type CategoryType =
+    | "Frontend"
+    | "Backend"
+    | "Computer Science"
+    | "Native";
+// eslint-disable-next-line react-refresh/only-export-components
+export const CATEGORIES: CategoryType[] = [
+    "Frontend",
+    "Backend",
+    "Computer Science",
+    "Native",
+];
+
+export default function PostList({
+    hasNavigation = true,
+    defaultTab = "all",
+}: PostListProps) {
+    const [activeTab, setActiveTab] = useState<TabType | CategoryType>(
+        defaultTab
+    );
     const [posts, setPosts] = useState<PostProps[]>([]);
     const {user} = useContext(AuthContext);
 
@@ -44,15 +62,22 @@ export default function PostList({hasNavigation = true, defaultTab = "all"}: Pos
         let postsQuery;
 
         if (activeTab === "my" && user) {
-            //나의 글 필터링
+            //나의 글 show
             postsQuery = query(
                 postsRef,
                 where("uid", "==", user.uid),
                 orderBy("createdAt", "asc")
             );
-        } else {
+        } else if (activeTab === "all") {
             //모든 글 show
             postsQuery = query(postsRef, orderBy("createdAt", "asc"));
+        } else {
+            //해당하는 카테고리 글 show
+            postsQuery = query(
+                postsRef,
+                where("category", "==", activeTab),
+                orderBy("createdAt", "asc")
+            );
         }
 
         const res = await getDocs(postsQuery);
@@ -75,7 +100,7 @@ export default function PostList({hasNavigation = true, defaultTab = "all"}: Pos
 
     useEffect(() => {
         getPosts();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [activeTab]);
 
     return (
@@ -102,6 +127,20 @@ export default function PostList({hasNavigation = true, defaultTab = "all"}: Pos
                     >
                         나의 글
                     </div>
+                    {CATEGORIES?.map((category) => (
+                        <div
+                            key={category}
+                            role="presentation"
+                            onClick={() => setActiveTab(category)}
+                            className={
+                                activeTab === category
+                                    ? "post__navigation--active"
+                                    : ""
+                            }
+                        >
+                            {category}
+                        </div>
+                    ))}
                 </div>
             )}
             <div className="post__list">
