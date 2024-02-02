@@ -6,17 +6,20 @@ import {
     getDocs,
     orderBy,
     query,
+    where,
 } from "firebase/firestore";
 import {db} from "firebaseApp";
 import {useContext, useEffect, useState} from "react";
 import {Link} from "react-router-dom";
 import {toast} from "react-toastify";
 
-interface PostListProps {
-    hasNavigation?: boolean;
-}
 
 type TabType = "all" | "my";
+
+interface PostListProps {
+    hasNavigation?: boolean;
+    defaultTab?: TabType;
+}
 
 export interface PostProps {
     id?: string;
@@ -29,15 +32,29 @@ export interface PostProps {
     uid: string;
 }
 
-export default function PostList({hasNavigation = true}: PostListProps) {
-    const [activeTab, setActiveTab] = useState<TabType>("all");
+export default function PostList({hasNavigation = true, defaultTab = "all"}: PostListProps) {
+    const [activeTab, setActiveTab] = useState<TabType>(defaultTab);
     const [posts, setPosts] = useState<PostProps[]>([]);
     const {user} = useContext(AuthContext);
 
     const getPosts = async () => {
         setPosts([]);
+        // eslint-disable-next-line prefer-const
         let postsRef = collection(db, "posts");
-        let postsQuery = query(postsRef, orderBy("createdAt", "asc"));
+        let postsQuery;
+
+        if (activeTab === "my" && user) {
+            //나의 글 필터링
+            postsQuery = query(
+                postsRef,
+                where("uid", "==", user.uid),
+                orderBy("createdAt", "asc")
+            );
+        } else {
+            //모든 글 show
+            postsQuery = query(postsRef, orderBy("createdAt", "asc"));
+        }
+
         const res = await getDocs(postsQuery);
 
         res?.forEach((doc) => {
@@ -58,7 +75,8 @@ export default function PostList({hasNavigation = true}: PostListProps) {
 
     useEffect(() => {
         getPosts();
-    }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [activeTab]);
 
     return (
         <>
