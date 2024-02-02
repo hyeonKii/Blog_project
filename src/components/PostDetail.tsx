@@ -1,38 +1,50 @@
-import {Link} from "react-router-dom";
+import {useEffect, useState} from "react";
+import {Link, useParams} from "react-router-dom";
+import {PostProps} from "./PostList";
+import {db} from "firebaseApp";
+import {doc, getDoc} from "firebase/firestore";
+import Loader from "./Loader";
 
 export default function PostDetail() {
+    const [post, setPost] = useState<PostProps | null>(null);
+    const params = useParams();
+
+    const getPost = async (id: string) => {
+        if (id) {
+            const docRef = doc(db, "posts", id);
+            const docSnap = await getDoc(docRef);
+
+            setPost({id: docSnap.id, ...(docSnap.data() as PostProps)});
+        }
+    };
+
+    useEffect(() => {
+        if (params?.id) getPost(params?.id);
+    }, [params?.id]);
+
     return (
         <>
             <div className="post__detail">
-                <div className="post__box">
+                {post ? (<div className="post__box">
                     <div className="post__title">
-                        Lorem Ipsum is simply dummy text of the printing
+                        {post?.title}
                     </div>
                     <div className="post__profile-box">
                         <div className="post__profile" />
-                        <div className="post__author-name">test</div>
-                        <div className="post__date">2024.01.01 일요일</div>
+                        <div className="post__author-name">{post?.email}</div>
+                        <div className="post__date">{post?.createdAt}</div>
                     </div>
                     <div className="post__utils-box">
                         <div className="post__delete">삭제</div>
                         <div className="post__edit">
-                            <Link to={`/posts/edit/1`}>수정</Link>
+                            <Link to={`/posts/edit/${post?.id}`}>수정</Link>
                         </div>
                     </div>
-                    <div className="post__text">
-                        Lorem Ipsum is simply dummy text of the printing and
-                        typesetting industry. Lorem Ipsum has been the
-                        industry's standard dummy text ever since the 1500s,
-                        when an unknown printer took a galley of type and
-                        scrambled it to make a type specimen book. It has
-                        survived not only five centuries, but also the leap into
-                        electronic typesetting, remaining essentially unchanged.
-                        It was popularised in the 1960s with the release of
-                        Letraset sheets containing Lorem Ipsum passages, and
-                        more recently with desktop publishing software like
-                        Aldus PageMaker including versions of Lorem Ipsum.
+                    <div className="post__text post__text--pre-wrap">
+                        {post?.content}
                     </div>
-                </div>
+                </div>): (<Loader />)}
+                
             </div>
         </>
     );

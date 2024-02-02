@@ -4,7 +4,8 @@
     "paths": {
       "pages/*": ["pages/*"],
       "components/*": ["components/*"],
-      "firebaseApp/": ["firebaseApp/*"]
+      "firebaseApp/": ["firebaseApp/*"],
+      "context/*": ["context/*"]
     },
     "target": "ES2020",
     "useDefineForClassFields": true,
