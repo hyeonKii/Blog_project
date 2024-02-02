@@ -1,10 +1,11 @@
 import AuthContext from "context/AuthContext";
-import {addDoc, collection, doc, getDoc, updateDoc} from "firebase/firestore";
+import {FirestoreError, addDoc, collection, doc, getDoc, updateDoc} from "firebase/firestore";
 import {db} from "firebaseApp";
 import {useContext, useEffect, useState} from "react";
 import {useNavigate, useParams} from "react-router-dom";
 import {toast} from "react-toastify";
 import {PostProps} from "./PostList";
+import { FirebaseError } from "firebase/app";
 
 export default function PostForm() {
     const params = useParams();
@@ -51,8 +52,12 @@ export default function PostForm() {
                 toast.success("게시글을 생성했습니다.");
                 navigate("/");
             }
-        } catch (error: any) {
+        } catch (error) {
+          if (error instanceof (FirebaseError || FirestoreError)) {
             toast?.error(error?.code);
+          } else {
+            toast?.error((error as Error)?.message);
+          }
         }
     };
 
