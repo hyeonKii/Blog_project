@@ -1,5 +1,12 @@
 import AuthContext from "context/AuthContext";
-import {collection, deleteDoc, doc, getDocs} from "firebase/firestore";
+import {
+    collection,
+    deleteDoc,
+    doc,
+    getDocs,
+    orderBy,
+    query,
+} from "firebase/firestore";
 import {db} from "firebaseApp";
 import {useContext, useEffect, useState} from "react";
 import {Link} from "react-router-dom";
@@ -28,9 +35,10 @@ export default function PostList({hasNavigation = true}: PostListProps) {
     const {user} = useContext(AuthContext);
 
     const getPosts = async () => {
-        const res = await getDocs(collection(db, "posts"));
-
         setPosts([]);
+        let postsRef = collection(db, "posts");
+        let postsQuery = query(postsRef, orderBy("createdAt", "asc"));
+        const res = await getDocs(postsQuery);
 
         res?.forEach((doc) => {
             const dataOject = {...doc.data(), id: doc.id};
@@ -102,7 +110,9 @@ export default function PostList({hasNavigation = true}: PostListProps) {
                                     <div
                                         className="post__delete"
                                         role="presentation"
-                                        onClick={() => handleDelete(post.id as string)}
+                                        onClick={() =>
+                                            handleDelete(post.id as string)
+                                        }
                                     >
                                         삭제
                                     </div>
