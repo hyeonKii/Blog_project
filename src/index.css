@@ -1,3 +1,14 @@
+
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
 /* header */
 
 header {
@@ -50,6 +61,12 @@ footer a {
 footer a:focus,
 footer a:hover {
     color: black;
+}
+
+.footer__theme-btn {
+  cursor: pointer;
+  width: 18px;
+  height: 18px;
 }
 
 /* post navigation */
@@ -375,8 +392,9 @@ input:checked + .carousel__slide-container .nav label {
 .form {
   margin: 0 auto;
   max-width: 680px;
-  padding: 20px;
+  padding: 2% 8% 20% 8%;
   margin-top: 20px;
+  min-height: 100vh;
 }
 
 .form input {
@@ -396,7 +414,7 @@ input:checked + .carousel__slide-container .nav label {
   line-height: 1.5;
   border-radius: 0.3rem;
   border: 1px solid lightgray;
-  width: 96%;
+  width: 96.5%;
   max-width: 680px;
 }
 
@@ -412,21 +430,22 @@ input:checked + .carousel__slide-container .nav label {
   margin-top: 20px;
 }
 
-.form .form__btn-submit {
+.form .form__btn--submit {
   width: 100%;
   height: 48px;
   font-weight: 600;
   padding: 10px 10px;
   float: right;
+  border: none;
   cursor: pointer;
-  margin: 0 auto;
+  margin: 10px auto;
   font-size: 16px;
   background-color: #2563eb;
   color: white;
 }
 
-.form .form__btn-submit:hover,
-.form .form__btn-submit:focus {
+.form .form__btn--submit:hover,
+.form .form__btn--submit:focus {
   background-color: #1945a4;
 }
 
@@ -482,3 +501,50 @@ input:checked + .carousel__slide-container .nav label {
   animation: rotation 1s linear infinite;
 
 }
+
+/* dark mode */
+
+.white {
+  transition: all 0.2s linear;
+  background-color: white;
+}
+
+
+.dark {
+  transition: all 0.2s linear;
+  background-color: #1e2937;
+  min-height: 100vh;
+}
+
+.dark a,
+.dark .form label,
+.dark .post__delete,
+.dark .profile__logout,
+.dark .form__title,
+.dark .post__navigation--active,
+.dark .post__title,
+.dark .post__author-name,
+.dark .footer__theme-btn,
+.dark .profile__name {
+  color: white;
+}
+
+.dark a:hover,
+.dark a:focus,
+.dark .post__text,
+.dark .post__text--pre-wrap,
+.dark .profile__email,
+.dark .post__date,
+.dark .form__block {
+  color: lightgray;
+}
+
+.dark .form__error {
+  color: #ff6a71;
+}
+
+.dark footer,
+.dark header {
+  background-color: #111827;
+}
+

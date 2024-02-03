@@ -171,7 +171,7 @@ export default function PostForm() {
                 <input
                     type="submit"
                     value={post ? "수정" : "제출"}
-                    className="form__btn-submit"
+                    className="form__btn--submit"
                 />
             </div>
         </form>
