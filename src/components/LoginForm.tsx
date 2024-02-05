@@ -4,6 +4,8 @@ import {toast} from "react-toastify";
 
 import {app} from "firebaseApp";
 import {getAuth, signInWithEmailAndPassword} from "firebase/auth";
+import { FirebaseError } from "firebase/app";
+import { FirestoreError } from "firebase/firestore";
 
 export default function LoginForm() {
     const [error, setError] = useState<string>("");
@@ -20,8 +22,12 @@ export default function LoginForm() {
 
             toast.success("로그인에 성공했습니다.");
             navigate("/");
-        } catch (error: any) {
-            toast.error(error?.code);
+        } catch (error) {
+            if (error instanceof (FirebaseError || FirestoreError)) {
+                toast?.error(error?.code);
+            } else {
+                toast?.error((error as Error)?.message);
+            }
         }
     };
 
@@ -93,7 +99,7 @@ export default function LoginForm() {
                 <input
                     type="submit"
                     value="로그인"
-                    className="form__btn-submit"
+                    className="form__btn--submit"
                     disabled={error?.length > 0}
                 />
             </div>

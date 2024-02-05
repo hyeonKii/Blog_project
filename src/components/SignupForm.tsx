@@ -4,6 +4,8 @@ import {app} from "firebaseApp";
 import {getAuth, createUserWithEmailAndPassword} from "firebase/auth";
 import {toast} from "react-toastify";
 import {useNavigate} from "react-router-dom";
+import { FirebaseError } from "firebase/app";
+import { FirestoreError } from "firebase/firestore";
 
 export default function SignupForm() {
     const [error, setError] = useState<string>("");
@@ -20,8 +22,12 @@ export default function SignupForm() {
 
             toast.success("회원가입에 성공했습니다!");
             navigate("/login");
-        } catch (error: any) {
-            toast.error(error?.code);
+        } catch (error) {
+            if (error instanceof (FirebaseError || FirestoreError)) {
+                toast?.error(error?.code);
+            } else {
+                toast?.error((error as Error)?.message);
+            }
         }
     };
 
@@ -122,7 +128,7 @@ export default function SignupForm() {
                 <input
                     type="submit"
                     value="회원가입"
-                    className="form__btn-submit"
+                    className="form__btn--submit"
                     disabled={error?.length > 0}
                 />
             </div>
