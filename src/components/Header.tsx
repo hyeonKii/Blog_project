@@ -4,7 +4,7 @@ export default function Header() {
     return (
         <header className="header">
             <Link to="/" className="header__logo">
-                React-Blog
+                Sirius.devLog
             </Link>
             <div>
                 <Link to="/posts/new">글쓰기</Link>
