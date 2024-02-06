@@ -64,9 +64,9 @@ export default function PostForm() {
             }
         } catch (error) {
             if (error instanceof (FirebaseError || FirestoreError)) {
-                toast?.error(error?.code);
+                toast.error(error?.code);
             } else {
-                toast?.error((error as Error)?.message);
+                toast.error((error as Error)?.message);
             }
         }
     };

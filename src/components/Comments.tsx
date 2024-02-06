@@ -1,4 +1,10 @@
-import {useState} from "react";
+import {useContext, useState} from "react";
+import {PostProps} from "./PostList";
+import {FirestoreError, arrayUnion, doc, updateDoc} from "firebase/firestore";
+import {db} from "firebaseApp";
+import AuthContext from "context/AuthContext";
+import {toast} from "react-toastify";
+import {FirebaseError} from "firebase/app";
 
 const COMMENTS = [
     {
@@ -39,8 +45,14 @@ const COMMENTS = [
     },
 ];
 
-export default function Comments() {
+interface CommentsProps {
+    post: PostProps;
+}
+
+export default function Comments({post}: CommentsProps) {
+    console.log(post);
     const [comment, setComment] = useState("");
+    const {user} = useContext(AuthContext);
 
     const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         const {
@@ -52,9 +64,49 @@ export default function Comments() {
         }
     };
 
+    const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+
+        try {
+            if (post && post?.id) {
+                const postRef = doc(db, "posts", post.id);
+
+                if (user?.uid) {
+                    const commentObj = {
+                        content: comment,
+                        uid: user.uid,
+                        email: user.email,
+                        createdAt: new Date()?.toLocaleDateString("ko", {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                            second: "2-digit",
+                        }),
+                    };
+
+                    await updateDoc(postRef, {
+                        comments: arrayUnion(commentObj),
+                        updateDated: new Date()?.toLocaleDateString("ko", {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                            second: "2-digit",
+                        }),
+                    });
+                }
+            }
+            toast.success("댓글을 생성했습니다.");
+            setComment("");
+        } catch (error) {
+            if (error instanceof (FirebaseError || FirestoreError)) {
+                toast.error(error?.code);
+            } else {
+                toast.error((error as Error)?.message);
+            }
+        }
+    };
+
     return (
         <div className="comments">
-            <form className="comments__form">
+            <form className="comments__form" onSubmit={onSubmit}>
                 <div className="form__block">
                     <label htmlFor="comment">댓글 입력</label>
                     <textarea
