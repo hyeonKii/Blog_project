@@ -18,7 +18,7 @@ interface CommentsProps {
 }
 
 export default function Comments({post, getPost}: CommentsProps) {
-    console.log(post);
+    // console.log(post);
     const [comment, setComment] = useState("");
     const {user} = useContext(AuthContext);
 
