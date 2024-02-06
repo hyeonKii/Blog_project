@@ -6,50 +6,12 @@ import AuthContext from "context/AuthContext";
 import {toast} from "react-toastify";
 import {FirebaseError} from "firebase/app";
 
-const COMMENTS = [
-    {
-        id: 1,
-        email: "test@kakao.com",
-        content: "댓글입니다",
-        createdAt: "2024-01-01",
-    },
-    {
-        id: 2,
-        email: "test@kakao.com",
-        content: "댓글입니다",
-        createdAt: "2024-01-01",
-    },
-    {
-        id: 3,
-        email: "test@kakao.com",
-        content: "댓글입니다",
-        createdAt: "2024-01-01",
-    },
-    {
-        id: 4,
-        email: "test@kakao.com",
-        content: "댓글입니다",
-        createdAt: "2024-01-01",
-    },
-    {
-        id: 5,
-        email: "test@kakao.com",
-        content: "댓글입니다",
-        createdAt: "2024-01-01",
-    },
-    {
-        id: 6,
-        email: "test@kakao.com",
-        content: "댓글입니다",
-        createdAt: "2024-01-01",
-    },
-];
-
 interface CommentsProps {
     post: PostProps;
+    getPost: (id: string) => Promise<void>;
 }
 
-export default function Comments({post}: CommentsProps) {
+export default function Comments({post, getPost}: CommentsProps) {
     console.log(post);
     const [comment, setComment] = useState("");
     const {user} = useContext(AuthContext);
@@ -91,6 +53,7 @@ export default function Comments({post}: CommentsProps) {
                             second: "2-digit",
                         }),
                     });
+                    await getPost(post.id);
                 }
             }
             toast.success("댓글을 생성했습니다.");
@@ -126,8 +89,8 @@ export default function Comments({post}: CommentsProps) {
                 </div>
             </form>
             <div className="comments__list">
-                {COMMENTS.map((comment) => (
-                    <div key={comment.id} className="comment__box">
+                {post?.comments?.slice(0)?.reverse().map((comment) => (
+                    <div key={comment.createdAt} className="comment__box">
                         <div className="comment__profile-box">
                             <div className="comment__email">
                                 {comment?.email}
