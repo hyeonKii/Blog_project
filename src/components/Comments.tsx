@@ -1,6 +1,12 @@
 import {useContext, useState} from "react";
-import {PostProps} from "./PostList";
-import {FirestoreError, arrayUnion, doc, updateDoc} from "firebase/firestore";
+import {CommentsInterface, PostProps} from "./PostList";
+import {
+    FirestoreError,
+    arrayRemove,
+    arrayUnion,
+    doc,
+    updateDoc,
+} from "firebase/firestore";
 import {db} from "firebaseApp";
 import AuthContext from "context/AuthContext";
 import {toast} from "react-toastify";
@@ -53,6 +59,7 @@ export default function Comments({post, getPost}: CommentsProps) {
                             second: "2-digit",
                         }),
                     });
+                    //문서 업데이트
                     await getPost(post.id);
                 }
             }
@@ -64,6 +71,19 @@ export default function Comments({post, getPost}: CommentsProps) {
             } else {
                 toast.error((error as Error)?.message);
             }
+        }
+    };
+
+    const handleDeleteComment = async (data: CommentsInterface) => {
+        const confirm = window.confirm("해당 댓글을 삭제하시겠습니까?");
+        if (confirm && post.id) {
+            const postRef = doc(db, "posts", post.id);
+            await updateDoc(postRef, {
+                comments: arrayRemove(data),
+            });
+            toast.success("댓글을 삭제했습니다.");
+            //문서 업데이트
+            await getPost(post.id);
         }
     };
 
@@ -89,20 +109,34 @@ export default function Comments({post, getPost}: CommentsProps) {
                 </div>
             </form>
             <div className="comments__list">
-                {post?.comments?.slice(0)?.reverse().map((comment) => (
-                    <div key={comment.createdAt} className="comment__box">
-                        <div className="comment__profile-box">
-                            <div className="comment__email">
-                                {comment?.email}
+                {post?.comments
+                    ?.slice(0)
+                    ?.reverse()
+                    .map((comment) => (
+                        <div key={comment.createdAt} className="comment__box">
+                            <div className="comment__profile-box">
+                                <div className="comment__email">
+                                    {comment?.email}
+                                </div>
+                                <div className="comment__date">
+                                    {comment?.createdAt}
+                                </div>
+                                {comment.uid === user?.uid && (
+                                    <div
+                                        className="comment__delete"
+                                        onClick={() =>
+                                            handleDeleteComment(comment)
+                                        }
+                                    >
+                                        삭제
+                                    </div>
+                                )}
                             </div>
-                            <div className="comment__date">
-                                {comment?.createdAt}
+                            <div className="comment__text">
+                                {comment?.content}
                             </div>
-                            <div className="comment__delete">삭제</div>
                         </div>
-                        <div className="comment__text">{comment?.content}</div>
-                    </div>
-                ))}
+                    ))}
             </div>
         </div>
     );
