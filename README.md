@@ -1,30 +1,34 @@
-# React + TypeScript + Vite
+## 개인 블로그 프로젝트
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## 요약
+1. Firebase CLI를 통해 배포
+2. 카테고리별 태그 기능 구현
+3. 게시글 및 댓글 기능 구현
+4. Carousel Sliding 기능 구현
+5. Localstroage를 활용하여 새로고침 시 다크모드 유지
 
-Currently, two official plugins are available:
+## 기능
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### 1. 로그인
+<img src="https://github.com/hyeonKii/ELICE_SharingPortfolio/assets/77368069/e87a4749-ad8d-4623-9688-8ee6380375b6">
 
-## Expanding the ESLint configuration
+### 2. 회원가입
+<img src="https://github.com/hyeonKii/ELICE_SharingPortfolio/assets/77368069/7169be66-4f5e-4d4e-b3a7-d4d527f6d0b2">
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+### 3. 캐러셀
+<img src="https://github.com/hyeonKii/ELICE_SharingPortfolio/assets/77368069/7e088089-8192-4a41-8bf8-88ceb96fbede">
 
-- Configure the top-level `parserOptions` property like this:
+### 4. 태그
+<img src="https://github.com/hyeonKii/ELICE_SharingPortfolio/assets/77368069/769fc2fb-3ced-4e98-be98-0880175bc6ec">
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
+### 5. 게시글 생성
+<img src="https://github.com/hyeonKii/ELICE_SharingPortfolio/assets/77368069/c0a9159f-238a-47ec-baa9-c67e3f49d72a">
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+### 6. 게시글 수정 및 삭제
+<img src="https://github.com/hyeonKii/ELICE_SharingPortfolio/assets/77368069/25ea8f33-1f2f-4263-bf19-843a4d3b3eb6">
+
+### 7. 댓글
+<img src="https://github.com/hyeonKii/ELICE_SharingPortfolio/assets/77368069/607e8d6f-8b2f-485c-9358-248762ca93ba">
+
+### 8. 다크모드
+<img src="https://github.com/hyeonKii/ELICE_SharingPortfolio/assets/77368069/a4992452-b55c-4a53-8e63-854a81f56e33">
